@@ -18,6 +18,7 @@ const addQuestion = ( event ) => {
                     <td>${retour.question.active ? 'Oui' : 'Non'}</td>
                     <td>${retour.question.type}</td>
                     <td>
+                        <a href="./questions/${retour.question.id}" class="btn btn-warning">Modifier</a>
                         <button class="btn btn-danger action-btn" data-action="removeQuestion">Supprimer</button>
                     </td>
                 `;
