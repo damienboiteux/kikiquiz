@@ -1,8 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoriesController!{% endblock %}
+{% block title %}Catégories{% endblock %}
 
 {% block body %}
+
+<h1 class="mb-5 text-center">Liste des catégories</h1>
+
 <table class="table">
     <thead>
         <tr>
@@ -13,11 +16,11 @@
     </thead>
     <tbody>
         {% for categorie in categories %}
-            <tr>
+            <tr data-id="{{categorie.id}}">
                 <td>{{categorie.id}}</td>
                 <td>{{categorie.label}}</td>
                 <td>
-                    <button class="btn btn-danger remove-categorie">Supprimer</button>
+                    <button class="btn btn-danger delete-categorie action-btn" data-action="removeCategorie">Supprimer</button>
                 </td>
             </tr>
         {% endfor %}
@@ -26,6 +29,6 @@
 <hr>
 {{form_start(form)}}
     {{form_row(form.label)}}
-    <button type)"button" class="btn btn-primary new-categorie">Valider</button>
+    <button type="button" class="btn btn-primary new-categorie action-btn" data-action="addCategorie">Valider</button>
 {{form_end(form)}}
 {% endblock %}

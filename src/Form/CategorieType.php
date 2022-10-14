@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CategorieType extends AbstractType
 {
@@ -15,6 +17,13 @@ class CategorieType extends AbstractType
         $builder
             ->add('label', TextType::class, [
                 'label' => "Libellé",
+                'constraints' => [
+                    new NotBlank(),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Au moins 2 caractères',
+                    ]),
+                ]
             ]);
     }
 
