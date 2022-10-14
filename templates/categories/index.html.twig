@@ -20,7 +20,7 @@
                 <td>{{categorie.id}}</td>
                 <td>{{categorie.label}}</td>
                 <td>
-                    <button class="btn btn-danger delete-categorie action-btn" data-action="removeCategorie">Supprimer</button>
+                    <button class="btn btn-danger action-btn" data-action="removeCategorie">Supprimer</button>
                 </td>
             </tr>
         {% endfor %}
@@ -29,6 +29,6 @@
 <hr>
 {{form_start(form)}}
     {{form_row(form.label)}}
-    <button type="button" class="btn btn-primary new-categorie action-btn" data-action="addCategorie">Valider</button>
+    <button type="button" class="btn btn-primary action-btn" data-action="addCategorie">Valider</button>
 {{form_end(form)}}
 {% endblock %}

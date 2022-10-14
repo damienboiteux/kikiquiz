@@ -19,8 +19,9 @@ window.addFlash = addFlash;
  *  MODULES A IMPORTER
  */
 
-import './btn.js/categorie-btn.js';
-import './btn.js/classe-btn.js';
+import './btn/categorie-btn.js';
+import './btn/classe-btn.js';
+import './btn/question-btn.js';
 
 
 /** 

@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Classes;
+use App\Entity\Questions;
 use App\Entity\Categories;
 use App\Form\CategorieType;
 use App\Repository\ClassesRepository;
+use App\Repository\QuestionsRepository;
 use App\Repository\CategoriesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,24 +56,6 @@ class ApiController extends AbstractController
     public function categorie_add(Request $request, CategoriesRepository $categoriesRepository): Response
     {
 
-        // $categorie = new Categories();
-        // $form = $this->createForm(CategorieType::class, $categorie)->handleRequest($request);
-        // if ($form->isSubmitted() && $form->isValid()) {
-        //     $categoriesRepository->save($categorie, true);
-        //     return $this->json([
-        //         'msg'       => 'La catégorie a été ajoutée',
-        //         'code'      => 'success',
-        //         'categorie' => $categorie,
-        //     ], 201);
-        // } else {
-        //     return $this->json([
-        //         'msg'       => 'La catégorie n\a pas a été ajoutée',
-        //         'code'      => 'danger',
-        //         'categorie' => $categorie,
-        //     ], 400);
-        // }
-
-
         $data       =   $request->request->all();
         $categorie  =   new Categories();
         $categorie->setLabel($data['categorie']['label']);
@@ -84,12 +68,6 @@ class ApiController extends AbstractController
         ], 201);
     }
 
-    // #[Route('/categories/{id}', name: 'api_categories_edit', methods: ['PUT', 'PATCH'])]
-    // public function categorie_edit(): Response
-    // {
-    //     return $this->json('ok', 200);
-    // }
-
     #[Route('/categories/{id}', name: 'api_categories_delete', methods: ['DELETE'])]
     public function categorie_delete(int $id, CategoriesRepository $categoriesRepository): Response
     {
@@ -97,6 +75,38 @@ class ApiController extends AbstractController
         $categoriesRepository->remove($categorie, true);
         return $this->json([
             'msg'  => 'La categorie a été supprimée',
+            'code' => 'success',
+        ], 200);
+    }
+
+    /**
+     * Questions
+     */
+
+    #[Route('/questions', name: 'api_question_add', methods: ['POST'])]
+    public function question_add(Request $request, QuestionsRepository $questionsRepository): Response
+    {
+
+        $data       =   $request->request->all();
+        $question   =   new Questions();
+        $question->setLabel($data['question']['label']);
+        $question->setType($data['question']['type']);
+        $question->setActive(isset($data['question']['active']));
+        $questionsRepository->save($question, true);
+        return $this->json([
+            'msg'       => 'La question a été ajoutée',
+            'code'      => 'success',
+            'question' => $question,
+        ], 201);
+    }
+
+    #[Route('/questions/{id}', name: 'api_question_delete', methods: ['DELETE'])]
+    public function question_delete(int $id, QuestionsRepository $questionsRepository): Response
+    {
+        $question = $questionsRepository->find($id);
+        $questionsRepository->remove($question, true);
+        return $this->json([
+            'msg'  => 'La question a été supprimée',
             'code' => 'success',
         ], 200);
     }

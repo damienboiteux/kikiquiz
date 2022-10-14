@@ -27,6 +27,8 @@ const addClasse = ( event ) => {
                 newClasse.querySelector( '.action-btn' ).addEventListener( 'click', removeClasse );
                 event.target.closest( 'form' ).reset();
 
+                addFlash( retour.msg );
+
             }
 
         } catch ( error ) {

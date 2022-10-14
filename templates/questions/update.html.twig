@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuestionsController!{% endblock %}
+
+{% block body %}
+
+{{form_start(question_form)}}
+{{form_row(question_form.label)}}
+{{form_row(question_form.active)}}
+{{form_row(question_form.type)}}
+{# <button type="button" class="btn btn-primary action-btn" data-action="addQuestion">Ajouter</button> #}
+{{form_end(question_form)}}
+
+<hr>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Texte</th>
+            <th>Success</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reponse in reponses %}
+            <tr data-id="{{reponse.id}}">
+                <td>{{reponse.id}}</td>
+                <td>{{reponse.label}}</td>
+                <td>{{reponse.success ? 'X':''}}</td>
+                <td><button class="btn btn-danger action-btn" data-action="removeReponse">Supprimer</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+{{form_start(reponse_form)}}
+{{form_row(reponse_form.label)}}
+{{form_row(reponse_form.success)}}
+<button type="button" class="btn btn-primary action-btn" data-action="addReponse">Ajouter</button>
+{{form_end(reponse_form)}}
+{% endblock %}
