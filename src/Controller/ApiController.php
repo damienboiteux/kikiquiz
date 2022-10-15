@@ -5,14 +5,18 @@ namespace App\Controller;
 use App\Entity\Classes;
 use App\Entity\Questions;
 use App\Entity\Categories;
+use App\Entity\Reponses;
 use App\Form\CategorieType;
 use App\Repository\ClassesRepository;
 use App\Repository\QuestionsRepository;
 use App\Repository\CategoriesRepository;
+use App\Repository\ReponsesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api')]
 class ApiController extends AbstractController
@@ -107,6 +111,41 @@ class ApiController extends AbstractController
         $questionsRepository->remove($question, true);
         return $this->json([
             'msg'  => 'La question a été supprimée',
+            'code' => 'success',
+        ], 200);
+    }
+
+    /** 
+     * Réponses
+     */
+    #[Route('/reponses', name: 'api_reponse_add', methods: ['POST'])]
+    public function reponse_add(
+        Request $request,
+        QuestionsRepository $questionsRepository,
+        ReponsesRepository $reponsesRepository,
+        SerializerInterface $serializer
+    ): Response {
+
+        $data       =   $request->request->all('reponse');
+        $reponse = new Reponses();
+        $reponse->setLabel($data['label']);
+        $reponse->setSuccess(isset($data['success']));
+        $question = $questionsRepository->find($request->request->get('question_id'));
+        $question->addReponse($reponse);
+        $reponsesRepository->save($reponse, true);
+        return $this->json([
+            'msg'       => 'La question a été ajoutée',
+            'code'      => 'success',
+            'reponse'   => $reponse,
+        ], 201);
+    }
+
+    #[Route('/reponses/{id}', name: 'api_reponse_delete', methods: ['DELETE'])]
+    public function reponse_delete(Reponses $reponse, ReponsesRepository $reponsesRepository): Response
+    {
+        $reponsesRepository->remove($reponse, true);
+        return $this->json([
+            'msg'  => 'La reponse a été supprimée',
             'code' => 'success',
         ], 200);
     }

@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ReponsesRepository;
+
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ReponsesRepository;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: ReponsesRepository::class)]
 class Reponses
@@ -20,6 +22,7 @@ class Reponses
     private ?bool $success = null;
 
     #[ORM\ManyToOne(inversedBy: 'reponses')]
+    #[Ignore]
     private ?Questions $questions = null;
 
     public function getId(): ?int

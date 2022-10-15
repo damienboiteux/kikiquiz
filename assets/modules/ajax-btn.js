@@ -36,8 +36,11 @@ document.querySelectorAll( '.action-btn' ).forEach(
         } );
     }
 );
+const ajax = document.querySelector( 'form.auto' );
+if ( ajax ) {
+    ajax.addEventListener( 'submit', ( event ) => {
+        event.preventDefault();
+        document.querySelector( 'form .action-btn' ).dispatchEvent( new Event( 'click' ) );
+    } );
 
-document.querySelector( 'form' ).addEventListener( 'submit', ( event ) => {
-    event.preventDefault();
-    document.querySelector( 'form .action-btn' ).dispatchEvent( new Event( 'click' ) );
-} );
+}

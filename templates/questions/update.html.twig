@@ -8,7 +8,7 @@
 {{form_row(question_form.label)}}
 {{form_row(question_form.active)}}
 {{form_row(question_form.type)}}
-{# <button type="button" class="btn btn-primary action-btn" data-action="addQuestion">Ajouter</button> #}
+<button type="submit" class="btn btn-primary">Valider</button>
 {{form_end(question_form)}}
 
 <hr>
@@ -35,9 +35,10 @@
 </table>
 
 <hr>
-{{form_start(reponse_form)}}
+{{form_start(reponse_form, {'attr': {'class':'auto'}})}}
 {{form_row(reponse_form.label)}}
 {{form_row(reponse_form.success)}}
 <button type="button" class="btn btn-primary action-btn" data-action="addReponse">Ajouter</button>
+<input type="text" name="question_id" value="{{question_id}}">
 {{form_end(reponse_form)}}
 {% endblock %}

@@ -15,14 +15,16 @@ class QuestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('label', TextType::class, [])
+            ->add('label', TextType::class, [
+                // 'required' => false
+            ])
             ->add('type', ChoiceType::class, [
                 'placeholder' => 'Choisir un type',
                 'choices' => [
                     "Sondage" => "sondage",
                     "Questionnaire" => "questionnaire",
                 ],
-                'required' => false,
+                // 'required' => false,
             ])
             ->add('active', CheckboxType::class, [
                 'required' => false,

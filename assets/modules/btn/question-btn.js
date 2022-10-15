@@ -55,5 +55,57 @@ const removeQuestion = ( event ) => {
     remove_question();
 }
 
+const addReponse = ( event ) => {
+    async function add_reponse() {
+        try {
+            const reponse = await fetch( '/api/reponses', {
+                method: "POST",
+                body: new FormData( event.target.closest( 'form' ) )
+            } );
+            const retour = await reponse.json();
+            if ( retour.code === 'success' ) {
+                const newReponse = document.createElement( 'tr' );
+                newReponse.dataset.id = retour.reponse.id;
+                newReponse.innerHTML = `
+                    <td>${retour.reponse.id}</td>  
+                    <td>${retour.reponse.label}</td>  
+                    <td>${retour.reponse.success ? 'X' : ''}</td>
+                    <td>
+                        <button class="btn btn-danger action-btn" data-action="removeReponse">Supprimer</button>
+                    </td>
+                `;
+                document.querySelector( 'tbody' ).appendChild( newReponse );
+                newReponse.querySelector( '.action-btn' ).addEventListener( 'click', removeReponse );
+                event.target.closest( 'form' ).reset();
+
+                addFlash( retour.msg );
+            }
+        } catch ( error ) {
+            console.log( error );
+        }
+    }
+    add_reponse();
+}
+
+const removeReponse = ( event ) => {
+    async function remove_reponse() {
+        try {
+            const reponse = await fetch( '/api/reponses/' + event.target.closest( 'tr' ).dataset.id, {
+                method: "DELETE"
+            } );
+            const retour = await reponse.json();
+            if ( retour.code === 'success' ) {
+                event.target.closest( 'tr' ).remove();
+
+            }
+        } catch ( error ) {
+            console.log( error );
+        }
+    }
+    remove_reponse();
+}
+
 window.addQuestion = addQuestion;
 window.removeQuestion = removeQuestion;
+window.addReponse = addReponse;
+window.removeReponse = removeReponse;
