@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Questions;
 use App\Entity\Questionnaires;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class QuestionnaireType extends AbstractType

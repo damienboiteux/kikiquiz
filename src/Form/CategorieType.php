@@ -31,6 +31,7 @@ class CategorieType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Categories::class,
+            "allow_extra_fields" => true,
         ]);
     }
 }

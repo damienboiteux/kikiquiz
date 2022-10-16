@@ -22,6 +22,7 @@ window.addFlash = addFlash;
 import './btn/categorie-btn.js';
 import './btn/classe-btn.js';
 import './btn/question-btn.js';
+import './btn/questionnaire-btn.js';
 
 
 /** 

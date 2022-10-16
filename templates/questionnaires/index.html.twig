@@ -15,8 +15,8 @@
         {% for questionnaire in questionnaires %}
             <tr data-id="{{questionnaire.id}}">
                 <td>{{questionnaire.id}}</td>
-                <td>{{question.code}}</td>
-                <td>{{question.type}}</td>
+                <td>{{questionnaire.code}}</td>
+                {# <td>{{questionnaire.type}}</td> #}
                 <td>
                     <a href="{{path('app_questionnaires_update', {'id':questionnaire.id})}}" class="btn btn-warning">Modifier</a>
                     <button class="btn btn-danger action-btn" data-action="removeQuestionnaire">Supprimer</button>

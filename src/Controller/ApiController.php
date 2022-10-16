@@ -5,18 +5,23 @@ namespace App\Controller;
 use App\Entity\Classes;
 use App\Entity\Questions;
 use App\Entity\Categories;
+use App\Entity\Questionnaires;
 use App\Entity\Reponses;
 use App\Form\CategorieType;
 use App\Repository\ClassesRepository;
 use App\Repository\QuestionsRepository;
 use App\Repository\CategoriesRepository;
+use App\Repository\QuestionnairesRepository;
 use App\Repository\ReponsesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api')]
 class ApiController extends AbstractController
@@ -57,19 +62,88 @@ class ApiController extends AbstractController
      */
 
     #[Route('/categories', name: 'api_categorie_add', methods: ['POST'])]
-    public function categorie_add(Request $request, CategoriesRepository $categoriesRepository): Response
-    {
+    public function categorie_add(
+        Request $request,
+        CategoriesRepository $categoriesRepository,
+        ValidatorInterface $validator
+    ): Response {
 
-        $data       =   $request->request->all();
-        $categorie  =   new Categories();
-        $categorie->setLabel($data['categorie']['label']);
-        $categoriesRepository->save($categorie, true);
-        return $this->json([
-            'msg'       => 'La catégorie a été ajoutée',
-            'code'      => 'success',
-            'categorie' => $categorie,
-            // 'test' => $test,
-        ], 201);
+        $data = $request->request->all('categorie');
+
+        // Validation depuis les contraintes de l'entité sans utilisation du formulaire
+
+        // $categorie = new Categories();
+        // $categorie->setLabel($data['label']);
+        // $errors = $validator->validate($categorie);
+        // if (count($errors) > 0) {
+        //     $msg = '';
+        //     foreach ($errors as $error) {
+        //         $msg .= $error->getMessage() . '<br>';
+        //     }
+        //     return $this->json([
+        //         'msg'       => $msg,
+        //         'code'      => 'danger',
+        //         'categorie' => null,
+        //     ], 201);
+        // } else {
+        //     $data       =   $request->request->all();
+        //     $categorie  =   new Categories();
+        //     $categorie->setLabel($data['categorie']['label']);
+        //     $categoriesRepository->save($categorie, true);
+        //     return $this->json([
+        //         'msg'       => 'La catégorie a été ajoutée',
+        //         'code'      => 'success',
+        //         'categorie' => $categorie,
+        //     ], 201);
+        // }
+
+
+        // Validation en utilisant les contraintes du formulaire
+
+        $form = $this->createForm(CategorieType::class);
+        $form->submit($data, true);
+
+        if (!$form->isValid()) {
+            $allErrors = $this->getErrorsFromForm($form);
+            // dd($allErrors);
+            $msg = '';
+            foreach ($allErrors as $fieldErrors) {
+                foreach ($fieldErrors as $error) {
+                    $msg .= $error . "<br>";
+                }
+            }
+            return $this->json([
+                'msg'       => $msg,
+                'code'      => 'danger',
+                'categorie' => null,
+            ], 201);
+        } else {
+            $data       =   $request->request->all();
+            $categorie  =   new Categories();
+            $categorie->setLabel($data['categorie']['label']);
+            $categoriesRepository->save($categorie, true);
+            return $this->json([
+                'msg'       => 'La catégorie a été ajoutée',
+                'code'      => 'success',
+                'categorie' => $categorie,
+            ], 201);
+        }
+    }
+
+    private function getErrorsFromForm(FormInterface $form)
+    {
+        $errors = array();
+        foreach ($form->getErrors() as $error) {
+            $errors[] = $error->getMessage();
+        }
+        foreach ($form->all() as $childForm) {
+            if ($childForm instanceof FormInterface) {
+                if ($childErrors = $this->getErrorsFromForm($childForm)) {
+                    $errors[$childForm->getName()] = $childErrors;
+                }
+            }
+        }
+        return $errors;
     }
 
     #[Route('/categories/{id}', name: 'api_categories_delete', methods: ['DELETE'])]
@@ -147,6 +221,71 @@ class ApiController extends AbstractController
         return $this->json([
             'msg'  => 'La reponse a été supprimée',
             'code' => 'success',
+        ], 200);
+    }
+
+    /** 
+     * Questionnaires
+     */
+    #[Route('/questionnaires', name: 'api_questionnaire_add', methods: ['POST'])]
+    public function questionnaire_add(
+        Request $request,
+        QuestionnairesRepository $questionnairesRepository
+    ): Response {
+
+        $data       =   $request->request->all('questionnaire');
+        $questionnaire = new Questionnaires();
+        $questionnaire->setCode($data['code']);
+        $questionnaire->setConsigne($data['consigne']);
+        $questionnairesRepository->save($questionnaire, true);
+        return $this->json([
+            'msg'           => 'Le questionnairen a été ajouté',
+            'code'          => 'success',
+            'questionnaire' => $questionnaire,
+        ], 201);
+    }
+
+    #[Route('/questionnaires/{id}', name: 'api_questionnaire_delete', methods: ['DELETE'])]
+    public function questionnaire_delete(
+        Questionnaires $questionnaire,
+        QuestionnairesRepository $questionnairesRepository
+    ): Response {
+        $questionnairesRepository->remove($questionnaire, true);
+        return $this->json([
+            'msg'  => 'Le questionnaire a été supprimé',
+            'code' => 'success',
+        ], 200);
+    }
+
+    #[Route('/questionnaires/{id}', name: 'api_questionnaire_add_question', methods: ['PATCH', 'PUT'])]
+    public function questionnaire_add_question(
+        Request $request,
+        Questionnaires $questionnaire,
+        QuestionnairesRepository $questionnairesRepository,
+        QuestionsRepository $questionsRepository,
+        ClassesRepository $classesRepository
+    ): Response {
+        $data = json_decode($request->getContent(), true);
+        switch ($data['entite']) {
+            case "question":
+                $question = $questionsRepository->find($data['id']);
+                if ($data['action'] === 'add') {
+                    $questionnaire->addQuestion($question);
+                    $msg = "Question ajoutée";
+                } else {
+                    $questionnaire->removeQuestion($question);
+                    $msg = "Question supprimée";
+                }
+                break;
+            case "classe":
+                break;
+        }
+
+        $questionnairesRepository->save($questionnaire, true);
+
+        return $this->json([
+            'code'  => 'success',
+            'msg'   => $msg,
         ], 200);
     }
 }

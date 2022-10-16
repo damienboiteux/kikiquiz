@@ -4,6 +4,9 @@ const addCategorie = ( event ) => {
             const reponse = await fetch( '/api/categories', {
                 method: "POST",
                 body: new FormData( event.target.closest( 'form' ) ),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             } );
             const retour = await reponse.json();
 
