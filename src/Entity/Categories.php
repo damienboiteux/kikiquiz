@@ -24,7 +24,7 @@ class Categories
         minMessage: 'Le nom de la catégorie doit comporter au moins {{ limit }} caractères',
         maxMessage: 'Le nom de la catégorie doit comporter au plus {{ limit }} caractères',
     )]
-    #[Assert\NotBlank(message: "Le nom de la catégorie ne peut pas être vide")]
+    // #[Assert\NotBlank(message: "Le nom de la catégorie ne peut pas être vide")]
     private ?string $label = null;
 
     public function getId(): ?int
