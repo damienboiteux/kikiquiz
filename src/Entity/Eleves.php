@@ -27,7 +27,7 @@ class Eleves
     #[ORM\ManyToMany(targetEntity: Classes::class, inversedBy: 'eleves')]
     private Collection $classes;
 
-    #[ORM\ManyToOne(inversedBy: 'eleves')]
+    #[ORM\ManyToOne(inversedBy: 'eleves', cascade: ['persist'])]
     private ?Examens $examens = null;
 
     public function __construct()

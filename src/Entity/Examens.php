@@ -18,7 +18,7 @@ class Examens
     #[ORM\ManyToOne(inversedBy: 'examens')]
     private ?Questionnaires $questionnaires = null;
 
-    #[ORM\OneToMany(mappedBy: 'examnes', targetEntity: Eleves::class)]
+    #[ORM\OneToMany(mappedBy: 'examens', targetEntity: Eleves::class)]
     private Collection $eleves;
 
     public function __construct()
@@ -51,22 +51,22 @@ class Examens
         return $this->eleves;
     }
 
-    public function addElefe(Eleves $elefe): self
+    public function addEleve(Eleves $eleve): self
     {
-        if (!$this->eleves->contains($elefe)) {
-            $this->eleves->add($elefe);
-            $elefe->setExamnes($this);
+        if (!$this->eleves->contains($eleve)) {
+            $this->eleves->add($eleve);
+            $eleve->setExamens($this);
         }
 
         return $this;
     }
 
-    public function removeElefe(Eleves $elefe): self
+    public function removeEleve(Eleves $eleve): self
     {
-        if ($this->eleves->removeElement($elefe)) {
+        if ($this->eleves->removeElement($eleve)) {
             // set the owning side to null (unless already changed)
-            if ($elefe->getExamnes() === $this) {
-                $elefe->setExamnes(null);
+            if ($eleve->getExamens() === $this) {
+                $eleve->setExamens(null);
             }
         }
 
