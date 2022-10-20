@@ -61,7 +61,7 @@ class QuestionsRepository extends ServiceEntityRepository
         return $questions_disponibles->getQuery()->getResult();
     }
 
-    public function findByQuestionnaires(int $questionnaire_id, int $offset = 0)
+    public function findNextQuestion(int $questionnaire_id, int $offset = 0)
     {
         return $this
             ->createQueryBuilder('q1')
