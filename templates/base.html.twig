@@ -14,6 +14,13 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="container">
+            <div id="messages" class="col-12 position-absolute bottom-0 start-0"></div>
+            <div class="row">
+                <div class="col-12">
+                    {% block body %}{% endblock %}
+                </div>
+            </div>
+        </div>
     </body>
 </html>

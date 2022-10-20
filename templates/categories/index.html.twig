@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégories{% endblock %}
+
+{% block body %}
+
+<h1 class="mb-5 text-center">Liste des catégories</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Libellé</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for categorie in categories %}
+            <tr data-id="{{categorie.id}}">
+                <td>{{categorie.id}}</td>
+                <td>{{categorie.label}}</td>
+                <td>
+                    <button class="btn btn-danger action-btn" data-action="removeCategorie">Supprimer</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+{{form_start(form)}}
+    {{form_row(form.label)}}
+    <button type="button" class="btn btn-primary action-btn" data-action="addCategorie">Valider</button>
+{{form_end(form)}}
+{% endblock %}

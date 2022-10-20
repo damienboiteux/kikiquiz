@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuestionsController!{% endblock %}
+
+{% block body %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Texte</th>
+            <th>Active</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for question in questions %}
+            <tr data-id="{{question.id}}">
+                <td>{{question.id}}</td>
+                <td>{{question.label}}</td>
+                <td>{{question.active ? 'X':''}}</td>
+                <td>{{question.type}}</td>
+                <td>
+                    <a href="{{path('app_questions_update', {'id':question.id})}}" class="btn btn-warning">Modifier</a>
+                    <button class="btn btn-danger action-btn" data-action="removeQuestion">Supprimer</button>
+                </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+{{form_start(form)}}
+{{form_row(form.label)}}
+{{form_row(form.active)}}
+{{form_row(form.type)}}
+<button type="button" class="btn btn-primary action-btn" data-action="addQuestion">Ajouter</button>
+{{form_end(form)}}
+{% endblock %}

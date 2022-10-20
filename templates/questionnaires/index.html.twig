@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuestionnairesController!{% endblock %}
+
+{% block body %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Code</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for questionnaire in questionnaires %}
+            <tr data-id="{{questionnaire.id}}">
+                <td>{{questionnaire.id}}</td>
+                <td>{{questionnaire.code}}</td>
+                {# <td>{{questionnaire.type}}</td> #}
+                <td>
+                    <a href="{{path('app_questionnaires_update', {'id':questionnaire.id})}}" class="btn btn-warning">Modifier</a>
+                    <button class="btn btn-danger action-btn" data-action="removeQuestionnaire">Supprimer</button>
+                </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+{{form_start(form)}}
+{{form_row(form.code)}}
+{{form_row(form.consigne)}}
+<button type="button" class="btn btn-primary action-btn" data-action="addQuestionnaire">Ajouter</button>
+{{form_end(form)}}
+{% endblock %}

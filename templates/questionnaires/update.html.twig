@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuestionnairesController!{% endblock %}
+
+{% block body %}
+
+{{form_start(form)}}
+{{form_row(form.code)}}
+{{form_row(form.consigne)}}
+<button type="submit" class="btn btn-primary">Valider</button>
+{{form_end(form)}}
+
+{# {{dump(form.questions)}} #}
+
+<hr>
+<p>Questions liées</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Label</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="questions-liees" data-id="{{questionnaire_id}}">
+        {% for question in questions_liees %}
+            <tr data-id="{{question.id}}">
+                <td>{{question.id}}</td>
+                <td>{{question.label}}</td>
+                <td><button class="btn btn-danger action-btn" data-action="removeQuestionnaireQuestion">Supprimer</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+<p>Questions disponibles</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Label</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="questions-disponibles" data-id="{{questionnaire_id}}">
+        {% for question in questions_disponibles %}
+            <tr data-id="{{question.id}}">
+                <td>{{question.id}}</td>
+                <td>{{question.label}}</td>
+                <td><button class="btn btn-primary action-btn" data-action="addQuestionnaireQuestion">Ajouter</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
