@@ -27,12 +27,13 @@ class Eleves
     #[ORM\ManyToMany(targetEntity: Classes::class, inversedBy: 'eleves')]
     private Collection $classes;
 
-    #[ORM\ManyToOne(inversedBy: 'eleves')]
-    private ?Examens $examens = null;
+    #[ORM\OneToMany(mappedBy: 'eleves', targetEntity: Examens::class)]
+    private Collection $eleves;
 
     public function __construct()
     {
         $this->classes = new ArrayCollection();
+        $this->eleves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,14 +101,32 @@ class Eleves
         return $this;
     }
 
-    public function getExamens(): ?Examens
+    /**
+     * @return Collection<int, Examens>
+     */
+    public function getEleves(): Collection
     {
-        return $this->examens;
+        return $this->eleves;
     }
 
-    public function setExamens(?Examens $examens): self
+    public function addElefe(Examens $elefe): self
     {
-        $this->examens = $examens;
+        if (!$this->eleves->contains($elefe)) {
+            $this->eleves->add($elefe);
+            $elefe->setEleves($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElefe(Examens $elefe): self
+    {
+        if ($this->eleves->removeElement($elefe)) {
+            // set the owning side to null (unless already changed)
+            if ($elefe->getEleves() === $this) {
+                $elefe->setEleves(null);
+            }
+        }
 
         return $this;
     }

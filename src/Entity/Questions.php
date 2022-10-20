@@ -30,10 +30,14 @@ class Questions
     #[ORM\OneToMany(mappedBy: 'questions', targetEntity: Reponses::class)]
     private Collection $reponses;
 
+    #[ORM\OneToMany(mappedBy: 'questions', targetEntity: ReponsesEleves::class)]
+    private Collection $reponsesEleves;
+
     public function __construct()
     {
         $this->questionnaires = new ArrayCollection();
         $this->reponses = new ArrayCollection();
+        $this->reponsesEleves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +132,36 @@ class Questions
             // set the owning side to null (unless already changed)
             if ($reponse->getQuestions() === $this) {
                 $reponse->setQuestions(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReponsesEleves>
+     */
+    public function getReponsesEleves(): Collection
+    {
+        return $this->reponsesEleves;
+    }
+
+    public function addReponsesElefe(ReponsesEleves $reponsesElefe): self
+    {
+        if (!$this->reponsesEleves->contains($reponsesElefe)) {
+            $this->reponsesEleves->add($reponsesElefe);
+            $reponsesElefe->setQuestions($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReponsesElefe(ReponsesEleves $reponsesElefe): self
+    {
+        if ($this->reponsesEleves->removeElement($reponsesElefe)) {
+            // set the owning side to null (unless already changed)
+            if ($reponsesElefe->getQuestions() === $this) {
+                $reponsesElefe->setQuestions(null);
             }
         }
 

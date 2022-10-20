@@ -22,7 +22,7 @@ class Reponses
     private ?bool $success = null;
 
     #[ORM\ManyToOne(inversedBy: 'reponses')]
-    // #[Ignore]
+    #[Ignore]
     private ?Questions $questions = null;
 
     public function getId(): ?int

@@ -17,6 +17,15 @@ class ReponsesEleves
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reponsesEleves')]
+    private ?Examens $examens = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reponsesEleves')]
+    private ?Questions $questions = null;
+
+    #[ORM\Column]
+    private ?bool $success = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -30,6 +39,42 @@ class ReponsesEleves
     public function setCommentaire(?string $commentaire): self
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getExamens(): ?Examens
+    {
+        return $this->examens;
+    }
+
+    public function setExamens(?Examens $examens): self
+    {
+        $this->examens = $examens;
+
+        return $this;
+    }
+
+    public function getQuestions(): ?Questions
+    {
+        return $this->questions;
+    }
+
+    public function setQuestions(?Questions $questions): self
+    {
+        $this->questions = $questions;
+
+        return $this;
+    }
+
+    public function isSuccess(): ?bool
+    {
+        return $this->success;
+    }
+
+    public function setSuccess(bool $success): self
+    {
+        $this->success = $success;
 
         return $this;
     }
